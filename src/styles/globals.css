@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root { color-scheme: light; }
+
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-stopped { overflow: hidden; }
+
+body {
+  @apply bg-paper text-ink font-body antialiased;
+}
+
+::selection { background: #D4AF37; color: #2B160A; }
+
+@layer components {
+  .glass {
+    @apply border border-black/10 bg-white/80 shadow-[0_8px_30px_rgba(43,22,10,0.06)] backdrop-blur-xl;
+  }
+  .gold-text {
+    @apply bg-gold-sheen bg-clip-text text-transparent;
+  }
+  .btn-gold {
+    @apply inline-flex items-center justify-center rounded-full bg-gold px-6 py-3 font-semibold text-ink transition hover:brightness-105 active:scale-95;
+  }
+  .btn-outline {
+    @apply inline-flex items-center justify-center rounded-full border border-ink/15 bg-white px-6 py-3 font-semibold text-ink transition hover:border-gold/60 hover:text-maroon;
+  }
+}
