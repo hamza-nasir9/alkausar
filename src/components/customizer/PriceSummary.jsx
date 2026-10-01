@@ -29,7 +29,7 @@ export default function PriceSummary({ pricing, flavor, size, layer, toppingName
         <span className="text-sm uppercase tracking-widest text-ink/60">Total</span>
         <span className="gold-text font-display text-4xl">{formatPKR(pricing.total)}</span>
       </div>
-      <button onClick={onAdd} className="btn-gold mt-5 w-full py-4">Add Cake to WhatsApp Tray</button>
+      {onAdd && <button onClick={onAdd} className="btn-gold mt-5 w-full py-4">Add Cake to WhatsApp Tray</button>}
       <p className="mt-3 text-center text-xs text-ink/40">Final price is confirmed with you on WhatsApp before baking.</p>
     </div>
   );

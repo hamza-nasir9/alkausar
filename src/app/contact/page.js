@@ -1,24 +1,39 @@
 "use client";
 
 import { useState } from "react";
-import { WHATSAPP_NUMBER } from "@/lib/whatsapp";
+import Field from "@/components/forms/Field";
+import useWhatsAppForm from "@/components/forms/useWhatsAppForm";
+import { useCart } from "@/context/CartContext";
+import { rules } from "@/lib/validators";
+import { formatContactMessage, openWhatsApp } from "@/lib/whatsapp";
 
 const MAP_SRC = "https://maps.google.com/maps?q=" + encodeURIComponent("W634+H9 Karachi") + "&z=17&output=embed";
 const MAP_LINK = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent("W634+H9 Karachi");
-const field = "w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-ink placeholder:text-ink/40 outline-none focus:border-gold/60";
+
+const SUBJECTS = ["General Query", "Order Status", "Custom Cake", "Bulk / Event Order", "Feedback or Complaint", "Other"];
+const INITIAL = { name: "", phone: "", subject: SUBJECTS[0], message: "" };
+const SCHEMA = {
+  name: rules.name,
+  phone: rules.phone,
+  subject: rules.oneOf("a subject", SUBJECTS),
+  message: (v) => (String(v).trim().length < 10 ? "Please write at least a short message (10+ characters)." : ""),
+};
 
 export default function ContactPage() {
-  const [form, setForm] = useState({ name: "", phone: "", message: "" });
-  const [error, setError] = useState("");
-  const onChange = (e) => setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
+  const { notify } = useCart();
+  const f = useWhatsAppForm(INITIAL, SCHEMA);
+  const [sent, setSent] = useState(false);
+  const { errors } = f;
 
-  // No email server needed: the query is sent to the shop's WhatsApp.
+  // Validates first; only a valid form opens WhatsApp.
   const submit = (e) => {
     e.preventDefault();
-    if (!form.name.trim() || !form.message.trim()) return setError("Please add your name and a message.");
-    setError("");
-    const text = `*Query - Al Kausar Bakers*\nName: ${form.name}\n${form.phone ? `Phone: ${form.phone}\n` : ""}\n${form.message}`;
-    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`, "_blank", "noopener,noreferrer");
+    if (!f.check(e.currentTarget)) return;
+    const v = f.values;
+    openWhatsApp(formatContactMessage({ name: v.name.trim(), phone: v.phone.trim(), subject: v.subject, message: v.message }));
+    notify("Thank you! Opening WhatsApp to send your message...");
+    f.reset();
+    setSent(true);
   };
 
   return (
@@ -46,13 +61,27 @@ export default function ContactPage() {
               <a href={MAP_LINK} target="_blank" rel="noopener noreferrer" className="btn-gold w-full">Open in Google Maps</a>
             </div>
 
-            <form onSubmit={submit} className="space-y-4 rounded-3xl border border-black/10 bg-white p-7 shadow-sm" noValidate>
+            <form onSubmit={submit} noValidate className="space-y-4 rounded-3xl border border-black/10 bg-white p-7 shadow-sm">
               <h2 className="font-display text-2xl text-ink">Send us a query</h2>
-              <input name="name" value={form.name} onChange={onChange} placeholder="Your name" aria-label="Your name" className={field} />
-              <input name="phone" value={form.phone} onChange={onChange} placeholder="Phone (optional)" aria-label="Phone" inputMode="tel" className={field} />
-              <textarea name="message" value={form.message} onChange={onChange} rows={4} placeholder="Ask about orders, cakes, events..." aria-label="Message" className={`${field} resize-none`} />
-              {error && <p role="alert" className="text-sm text-red-600">{error}</p>}
+              <p className="text-sm text-ink/55">Your message opens in WhatsApp, ready to send to our team.</p>
+
+              <div className="grid gap-4 sm:grid-cols-2">
+                <Field label="Full name" required error={errors.name}>{(p) => <input {...p} {...f.bind("name")} autoComplete="name" placeholder="Your name" />}</Field>
+                <Field label="Phone" required error={errors.phone}>{(p) => <input {...p} {...f.bind("phone")} type="tel" inputMode="tel" autoComplete="tel" placeholder="0300 1234567" />}</Field>
+              </div>
+              <Field label="Subject" required error={errors.subject}>
+                {(p) => (
+                  <select {...p} {...f.bind("subject")}>
+                    {SUBJECTS.map((s) => <option key={s}>{s}</option>)}
+                  </select>
+                )}
+              </Field>
+              <Field label="Message" required error={errors.message}>
+                {(p) => <textarea {...p} {...f.bind("message")} rows={5} maxLength={800} placeholder="Ask about orders, cakes, events..." className={`${p.className} resize-none`} />}
+              </Field>
+
               <button type="submit" className="btn-gold w-full py-4">Send via WhatsApp</button>
+              {sent && <p role="status" className="text-center text-xs text-ink/50">Didn&apos;t open? Allow pop-ups for this site, or message us directly on WhatsApp.</p>}
             </form>
           </div>
 

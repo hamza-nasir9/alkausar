@@ -36,9 +36,12 @@ export default function CategorySection({ section, index }) {
   return (
     <section id={`section-${section.id}`} ref={root} className={`scroll-mt-24 px-5 py-20 sm:px-10 sm:py-28 ${index % 2 === 0 ? "bg-paper" : "bg-cream"}`}>
       <div className="mx-auto max-w-7xl">
-        <div className={`grid gap-10 lg:grid-cols-[0.8fr_1.6fr] lg:gap-14 ${flip ? "lg:[&>*:first-child]:order-2" : ""}`}>
-          {/* cover + heading */}
-          <div className="lg:sticky lg:top-28 lg:self-start">
+        {/* Zigzag: the track sizes swap together with the content, so the cards
+            column is ALWAYS the wide one (2/3) and the banner column the narrow one (1/3).
+            minmax(0, ...) stops card content from stretching a track. */}
+        <div className={`grid gap-10 lg:gap-14 ${flip ? "lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]" : "lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]"}`}>
+          {/* banner: cover + heading */}
+          <div className={`min-w-0 lg:sticky lg:top-28 lg:self-start ${flip ? "lg:order-2" : "lg:order-1"}`}>
             <p className="cs-reveal text-[11px] uppercase tracking-[0.45em] text-maroon">
               <span className="mr-3 font-display text-xl text-goldDeep">{String(index + 1).padStart(2, "0")}</span>
               {section.eyebrow}
@@ -66,10 +69,10 @@ export default function CategorySection({ section, index }) {
             </Link>
           </div>
 
-          {/* featured items */}
-          <div className="grid gap-5 sm:grid-cols-2">
+          {/* featured items: same 2x2 grid, gap and card size in both variations */}
+          <div className={`grid min-w-0 auto-rows-fr gap-5 sm:grid-cols-2 lg:gap-6 ${flip ? "lg:order-1" : "lg:order-2"}`}>
             {items.map((item) => (
-              <div key={item.id} className="cs-reveal">
+              <div key={item.id} className="cs-reveal h-full min-w-0">
                 <ProductCard item={item} />
               </div>
             ))}

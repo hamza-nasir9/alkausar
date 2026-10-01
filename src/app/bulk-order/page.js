@@ -5,22 +5,27 @@ import Link from "next/link";
 import { useCart } from "@/context/CartContext";
 import { MENU } from "@/lib/menuData";
 import { OCCASIONS, PACKAGING, MIN_KG, MAX_KG, BULK_GROUPS, MAX_CUSTOM_ROWS, MAX_KG_PER_ITEM } from "@/lib/bulkConfig";
-import { formatPKR } from "@/lib/whatsapp";
+import { formatPKR, formatBulkInquiry, openWhatsApp } from "@/lib/whatsapp";
+import { rules, toISODate } from "@/lib/validators";
+import Field from "@/components/forms/Field";
+import useWhatsAppForm from "@/components/forms/useWhatsAppForm";
 import SweetSelector from "@/components/bulk/SweetSelector";
 
 const GROUP_IDS = BULK_GROUPS.map((g) => g.id);
 // Every weight-based (kg) item from the mithai, halwa and nimco categories
 const SWEET_ITEMS = MENU.filter((m) => m.set === "kg" && GROUP_IDS.includes(m.category));
+const REQ_SCHEMA = { name: rules.name, phone: rules.phone, date: rules.futureDate("the date you need the order by", { maxDays: 365 }) };
 const newRow = () => ({ id: `r-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`, name: "", kg: "" });
 const field = "w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-sm text-ink placeholder:text-ink/40 outline-none focus:border-gold/60";
 
 export default function BulkOrderPage() {
-  const { addItem } = useCart();
+  const { addItem, notify } = useCart();
   const [occasion, setOccasion] = useState(OCCASIONS[0]);
   const [selection, setSelection] = useState({});
   const [boxes, setBoxes] = useState(10);
   const [pack, setPack] = useState(PACKAGING[0].id);
-  const [date, setDate] = useState("");
+  const req = useWhatsAppForm({ name: "", phone: "", date: "" }, REQ_SCHEMA);
+  const date = req.values.date;
   const [note, setNote] = useState("");
   const [added, setAdded] = useState(false);
   const [target, setTarget] = useState("");
@@ -56,6 +61,36 @@ export default function BulkOrderPage() {
   const updateRow = (id, patch) => setRows((rs) => rs.map((r) => (r.id === id ? { ...r, ...patch } : r)));
   const removeRow = (id) => setRows((rs) => rs.filter((r) => r.id !== id));
 
+  // Dedicated WhatsApp inquiry. Needs name, phone and a valid date first.
+  const sendInquiry = () => {
+    if (!canSubmit) return;
+    if (!req.check(document.getElementById("bulk-form"))) return;
+    const r = req.values;
+    openWhatsApp(
+      formatBulkInquiry({
+        name: r.name.trim(),
+        phone: r.phone.trim(),
+        date: r.date,
+        occasion,
+        targetKg,
+        totalKg,
+        sweets: chosenSweets.map((i) => `${i.name} - ${selection[i.id]} kg`),
+        custom: customRows.map((r2) => `${r2.name.trim()} - ${r2.kg} kg`),
+        packaging: packaging.name,
+        boxes: Math.max(1, Number(boxes) || 1),
+        notes: note,
+        total: Math.round(grandTotal),
+      })
+    );
+    notify("Thank you! Opening WhatsApp to send your bulk order inquiry...");
+    setSelection({});
+    setRows([]);
+    setNote("");
+    setTarget("");
+    setAdded(false);
+    req.reset();
+  };
+
   const submit = (e) => {
     e.preventDefault();
     if (!canSubmit) return;
@@ -90,7 +125,7 @@ export default function BulkOrderPage() {
           <Link href="/custom-cake" className="text-maroon underline underline-offset-4 hover:text-ink">Cake Atelier</Link>.
         </p>
 
-        <form onSubmit={submit} className="mt-10 space-y-8">
+        <form id="bulk-form" onSubmit={submit} noValidate className="mt-10 space-y-8">
           <section className="rounded-3xl border border-black/10 bg-white p-6 shadow-sm sm:p-8">
             <h2 className="font-display text-2xl text-ink">1. Occasion</h2>
             <div className="mt-4 flex flex-wrap gap-2">
@@ -169,16 +204,13 @@ export default function BulkOrderPage() {
           </section>
 
           <section className="rounded-3xl border border-black/10 bg-white p-6 shadow-sm sm:p-8">
-            <h2 className="font-display text-2xl text-ink">6. Delivery &amp; notes</h2>
+            <h2 className="font-display text-2xl text-ink">6. Contact, date &amp; notes</h2>
+            <p className="mt-1 text-sm text-ink/50">Name, phone and date are required to send an inquiry on WhatsApp.</p>
             <div className="mt-4 grid gap-4 sm:grid-cols-2">
-              <div>
-                <label htmlFor="date" className="mb-2 block text-xs uppercase tracking-widest text-ink/50">Needed by</label>
-                <input id="date" type="date" value={date} onChange={(e) => setDate(e.target.value)} className={field} />
-              </div>
-              <div>
-                <label htmlFor="note" className="mb-2 block text-xs uppercase tracking-widest text-ink/50">Special instructions</label>
-                <input id="note" value={note} onChange={(e) => setNote(e.target.value)} placeholder="Names on box, dietary notes, etc." className={field} />
-              </div>
+              <Field label="Full name" required error={req.errors.name}>{(p) => <input {...p} {...req.bind("name")} autoComplete="name" placeholder="Your name" />}</Field>
+              <Field label="Phone" required error={req.errors.phone}>{(p) => <input {...p} {...req.bind("phone")} type="tel" inputMode="tel" autoComplete="tel" placeholder="0300 1234567" />}</Field>
+              <Field label="Needed by" required error={req.errors.date}>{(p) => <input {...p} {...req.bind("date")} type="date" min={toISODate()} />}</Field>
+              <Field label="Special instructions">{(p) => <input {...p} value={note} onChange={(e) => setNote(e.target.value)} placeholder="Names on box, dietary notes, etc." />}</Field>
             </div>
           </section>
 
@@ -190,8 +222,11 @@ export default function BulkOrderPage() {
               </div>
               <span className="gold-text font-display text-4xl">{formatPKR(grandTotal)}</span>
             </div>
-            <button type="submit" disabled={!canSubmit} className="btn-gold mt-6 w-full py-4 disabled:cursor-not-allowed disabled:opacity-40">
-              Add Bulk Order to WhatsApp Tray
+            <button type="button" onClick={sendInquiry} disabled={!canSubmit} className="btn-gold mt-6 w-full py-4 disabled:cursor-not-allowed disabled:opacity-40">
+              Send Bulk Inquiry on WhatsApp
+            </button>
+            <button type="submit" disabled={!canSubmit} className="btn-outline mt-3 w-full py-3.5 text-sm disabled:cursor-not-allowed disabled:opacity-40">
+              Or add this order to my tray
             </button>
             {!canSubmit && <p className="mt-2 text-center text-xs text-ink/40">Choose at least {MIN_KG} kg of sweets (listed or custom) to continue.</p>}
             {added && <p className="mt-3 text-center text-sm text-maroon">Added to your tray. Open the tray icon above to send it on WhatsApp.</p>}

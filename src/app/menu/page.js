@@ -125,7 +125,7 @@ export default function MenuPage() {
                       <h2 id={`h-${g.id}`} className="font-display text-3xl text-ink sm:text-4xl">{g.label}</h2>
                       <span className="text-xs uppercase tracking-widest text-ink/40">{g.items.length} {g.items.length === 1 ? "item" : "items"}</span>
                     </div>
-                    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                    <div className="grid auto-rows-fr gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                       {g.items.map((item) => <ProductCard key={item.id} item={item} onQuickView={setQuick} />)}
                     </div>
                   </section>

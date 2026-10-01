@@ -6,7 +6,10 @@ import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { useCart } from "@/context/CartContext";
 import { FLAVORS, SIZES, LAYERS, TOPPINGS, MAX_TEXT, PIPING_PRICE, CAKE_SUGGESTIONS, calcPrice } from "@/lib/cakeConfig";
-import { formatPKR } from "@/lib/whatsapp";
+import { formatPKR, formatCakeInquiry, openWhatsApp } from "@/lib/whatsapp";
+import { rules, toISODate } from "@/lib/validators";
+import Field from "@/components/forms/Field";
+import useWhatsAppForm from "@/components/forms/useWhatsAppForm";
 import FlavorSelector from "@/components/customizer/FlavorSelector";
 import LayerStepper from "@/components/customizer/LayerStepper";
 import PriceSummary from "@/components/customizer/PriceSummary";
@@ -16,7 +19,10 @@ const CakeCanvas3D = dynamic(() => import("@/components/customizer/CakeCanvas3D"
   loading: () => <div className="grid h-full place-items-center text-sm text-ink/50">Loading 3D preview…</div>,
 });
 
-const STEPS = ["Style", "Flavor", "Size", "Toppings", "Message"];
+const STEPS = ["Style", "Flavor", "Size", "Toppings", "Message", "Send"];
+const CAKE_INITIAL = { customName: "", flavorId: "choc", size: 2, layers: 1, toppings: [], text: "", notes: "" };
+const REQ_INITIAL = { name: "", phone: "", date: "" };
+const REQ_SCHEMA = { name: rules.name, phone: rules.phone, date: rules.futureDate("your event / needed-by date", { maxDays: 365 }) };
 const MAX_NAME = 60;
 
 function Chip({ active, onClick, children }) {
@@ -28,9 +34,10 @@ function Chip({ active, onClick, children }) {
 }
 
 export default function CustomCakePage() {
-  const { addItem } = useCart();
+  const { addItem, notify } = useCart();
   const [step, setStep] = useState(0);
-  const [cfg, setCfg] = useState({ customName: "", flavorId: "choc", size: 2, layers: 1, toppings: [], text: "" });
+  const [cfg, setCfg] = useState(CAKE_INITIAL);
+  const req = useWhatsAppForm(REQ_INITIAL, REQ_SCHEMA);
 
   // Pre-fill the cake name when arriving from the home page (?name=Red%20Velvet)
   useEffect(() => {
@@ -59,8 +66,35 @@ export default function CustomCakePage() {
         "Base flavor": flavor.name,
         Toppings: toppingNames.length ? toppingNames : "None",
         "Piping text": cfg.text.trim(),
+        "Design notes": cfg.notes.trim(),
       },
     });
+
+  // Dedicated WhatsApp inquiry: validates the contact details + event date first.
+  const sendInquiry = (e) => {
+    e.preventDefault();
+    if (!req.check(e.currentTarget.closest("form") || e.currentTarget)) return;
+    const r = req.values;
+    openWhatsApp(
+      formatCakeInquiry({
+        name: r.name.trim(),
+        phone: r.phone.trim(),
+        date: r.date,
+        requested: cfg.customName,
+        flavor: flavor.name,
+        size: cfg.size,
+        layer: layer.label,
+        toppings: toppingNames,
+        text: cfg.text,
+        notes: cfg.notes,
+        total: pricing.total,
+      })
+    );
+    notify("Thank you! Opening WhatsApp to send your cake request...");
+    setCfg(CAKE_INITIAL);
+    req.reset();
+    setStep(0);
+  };
 
   return (
     <div className="min-h-dvh bg-cream px-5 pb-28 pt-32 sm:px-10">
@@ -176,8 +210,26 @@ export default function CustomCakePage() {
                         <input id="piping" value={cfg.text} maxLength={MAX_TEXT} onChange={(e) => set({ text: e.target.value })} placeholder="Happy Birthday Ayan" className="w-full rounded-2xl border border-black/10 bg-white px-5 py-4 font-display text-xl text-ink placeholder:text-ink/30 outline-none focus:border-gold/60" />
                         <p className="mt-2 text-right text-xs text-ink/40">{cfg.text.length}/{MAX_TEXT}</p>
                       </div>
-                      <PriceSummary pricing={pricing} flavor={flavor} size={cfg.size} layer={layer} toppingNames={toppingNames} text={cfg.text} customName={cfg.customName} onAdd={addToTray} />
+                      <Field label="Custom design notes (optional)">
+                        {(p) => <textarea {...p} value={cfg.notes} onChange={(e) => set({ notes: e.target.value })} rows={4} maxLength={400} placeholder="Theme, colours, character, photo reference, number of candles..." className={`${p.className} resize-none`} />}
+                      </Field>
                     </>
+                  )}
+
+                  {step === 5 && (
+                    <form onSubmit={sendInquiry} noValidate className="space-y-6">
+                      <h2 className="font-display text-3xl text-ink">Send your request</h2>
+                      <PriceSummary pricing={pricing} flavor={flavor} size={cfg.size} layer={layer} toppingNames={toppingNames} text={cfg.text} customName={cfg.customName} />
+                      <div className="grid gap-4 sm:grid-cols-2">
+                        <Field label="Full name" required error={req.errors.name}>{(p) => <input {...p} {...req.bind("name")} autoComplete="name" placeholder="Your name" />}</Field>
+                        <Field label="Phone" required error={req.errors.phone}>{(p) => <input {...p} {...req.bind("phone")} type="tel" inputMode="tel" autoComplete="tel" placeholder="0300 1234567" />}</Field>
+                      </div>
+                      <Field label="Event / needed-by date" required error={req.errors.date}>{(p) => <input {...p} {...req.bind("date")} type="date" min={toISODate()} />}</Field>
+                      <div className="space-y-3">
+                        <button type="submit" className="btn-gold w-full py-4">Send Cake Request on WhatsApp</button>
+                        <button type="button" onClick={addToTray} className="btn-outline w-full py-3.5 text-sm">Or add this cake to my tray</button>
+                      </div>
+                    </form>
                   )}
                 </motion.div>
               </AnimatePresence>

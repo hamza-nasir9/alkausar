@@ -1,22 +1,19 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useCart } from "@/context/CartContext";
 import { useLenis } from "@/components/global/SmoothScrollProvider";
-import { buildWhatsAppUrl, formatPKR, logOrder } from "@/lib/whatsapp";
-
-const field = "w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-sm text-ink placeholder:text-ink/40 outline-none focus:border-gold/60";
+import { formatPKR } from "@/lib/whatsapp";
 
 export default function WhatsAppCartDrawer() {
-  const { items, total, count, isOpen, closeCart, setQty, removeItem, clearCart } = useCart();
+  const { items, total, count, isOpen, closeCart, setQty, removeItem, clearCart, checkoutOpen, openCheckout } = useCart();
   const lenis = useLenis();
-  const [customer, setCustomer] = useState({ name: "", address: "", note: "" });
 
   useEffect(() => {
     if (!lenis) return;
-    isOpen ? lenis.stop() : lenis.start();
-  }, [isOpen, lenis]);
+    isOpen || checkoutOpen ? lenis.stop() : lenis.start();
+  }, [isOpen, checkoutOpen, lenis]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -24,14 +21,6 @@ export default function WhatsAppCartDrawer() {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [isOpen, closeCart]);
-
-  const onChange = (e) => setCustomer((c) => ({ ...c, [e.target.name]: e.target.value }));
-
-  const checkout = () => {
-    if (!items.length) return;
-    logOrder(items, customer);
-    window.open(buildWhatsAppUrl(items, total, customer), "_blank", "noopener,noreferrer");
-  };
 
   return (
     <AnimatePresence>
@@ -92,13 +81,6 @@ export default function WhatsAppCartDrawer() {
                 </AnimatePresence>
               )}
 
-              {items.length > 0 && (
-                <div className="space-y-3 pt-3">
-                  <input name="name" value={customer.name} onChange={onChange} placeholder="Your name" className={field} />
-                  <input name="address" value={customer.address} onChange={onChange} placeholder="Delivery address (optional)" className={field} />
-                  <textarea name="note" value={customer.note} onChange={onChange} rows={2} placeholder="Notes: pickup time, occasion..." className={`${field} resize-none`} />
-                </div>
-              )}
             </div>
 
             <div className="border-t border-black/10 px-6 py-5">
@@ -106,8 +88,8 @@ export default function WhatsAppCartDrawer() {
                 <span className="text-sm uppercase tracking-widest text-ink/60">Total</span>
                 <span className="gold-text font-display text-3xl">{formatPKR(total)}</span>
               </div>
-              <button onClick={checkout} disabled={!items.length} className="btn-gold w-full gap-2 py-4 disabled:cursor-not-allowed disabled:opacity-40">
-                Send Order on WhatsApp
+              <button onClick={openCheckout} disabled={!items.length} className="btn-gold w-full gap-2 py-4 disabled:cursor-not-allowed disabled:opacity-40">
+                Checkout
               </button>
               {items.length > 0 && (
                 <button onClick={clearCart} className="mt-3 w-full text-center text-xs text-ink/40 transition hover:text-ink">Clear tray</button>

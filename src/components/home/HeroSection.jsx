@@ -78,7 +78,7 @@ export default function HeroSection() {
         <p className="mt-2 text-center font-display text-sm text-ink">Signature Mithai</p>
       </div>
       <div className="hero-card absolute right-[5%] top-[16%] hidden w-40 rotate-6 overflow-hidden rounded-2xl border border-black/10 bg-white p-2 shadow-xl md:block">
-        <img src={IMG.cake} alt="Custom cake" className="h-28 w-full rounded-xl object-cover" onError={(e) => (e.currentTarget.style.display = "none")} />
+        <img src={IMG.cakes} alt="Custom cake" className="h-28 w-full rounded-xl object-cover" onError={(e) => (e.currentTarget.style.display = "none")} />
         <p className="mt-2 text-center font-display text-sm text-ink">Custom Cakes</p>
       </div>
       <div className="hero-card absolute bottom-[10%] right-[10%] hidden w-36 -rotate-3 overflow-hidden rounded-2xl border border-black/10 bg-white p-2 shadow-xl lg:block">

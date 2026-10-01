@@ -33,6 +33,8 @@ function reducer(state, action) {
 export function CartProvider({ children }) {
   const [items, dispatch] = useReducer(reducer, []);
   const [isOpen, setIsOpen] = useState(false);
+  const [checkoutOpen, setCheckoutOpen] = useState(false);
+  const [toast, setToast] = useState(null);
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
@@ -56,6 +58,17 @@ export function CartProvider({ children }) {
     dispatch({ type: "ADD", item });
     if (open) setIsOpen(true);
   }, []);
+  // Checkout replaces the tray drawer while it is open
+  const openCheckout = useCallback(() => {
+    setIsOpen(false);
+    setCheckoutOpen(true);
+  }, []);
+  const closeCheckout = useCallback(() => setCheckoutOpen(false), []);
+
+  // Brief site-wide notification (auto-dismisses; see components/global/Toast.jsx)
+  const notify = useCallback((message, tone = "success") => setToast({ id: Date.now(), message, tone }), []);
+  const dismissToast = useCallback(() => setToast(null), []);
+
   const setQty = useCallback((lineId, qty) => dispatch({ type: "SET_QTY", lineId, qty }), []);
   const removeItem = useCallback((lineId) => dispatch({ type: "REMOVE", lineId }), []);
   const clearCart = useCallback(() => dispatch({ type: "CLEAR" }), []);
@@ -64,8 +77,8 @@ export function CartProvider({ children }) {
   const total = useMemo(() => items.reduce((s, i) => s + i.price * i.qty, 0), [items]);
 
   const value = useMemo(
-    () => ({ items, count, total, isOpen, hydrated, openCart, closeCart, addItem, setQty, removeItem, clearCart }),
-    [items, count, total, isOpen, hydrated, openCart, closeCart, addItem, setQty, removeItem, clearCart]
+    () => ({ items, count, total, isOpen, hydrated, openCart, closeCart, addItem, setQty, removeItem, clearCart, checkoutOpen, openCheckout, closeCheckout, toast, notify, dismissToast }),
+    [items, count, total, isOpen, hydrated, openCart, closeCart, addItem, setQty, removeItem, clearCart, checkoutOpen, openCheckout, closeCheckout, toast, notify, dismissToast]
   );
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }

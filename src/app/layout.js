@@ -5,6 +5,8 @@ import SmoothScrollProvider from "@/components/global/SmoothScrollProvider";
 import Navbar from "@/components/global/Navbar";
 import Footer from "@/components/global/Footer";
 import WhatsAppCartDrawer from "@/components/global/WhatsAppCartDrawer";
+import CheckoutModal from "@/components/global/CheckoutModal";
+import Toast from "@/components/global/Toast";
 import CustomCursor from "@/components/global/CustomCursor";
 import NoiseOverlay from "@/components/global/NoiseOverlay";
 
@@ -29,6 +31,8 @@ export default function RootLayout({ children }) {
             <main>{children}</main>
             <Footer />
             <WhatsAppCartDrawer />
+            <CheckoutModal />
+            <Toast />
             <CustomCursor />
             <NoiseOverlay />
           </SmoothScrollProvider>
