@@ -54,9 +54,33 @@ export default function Footer() {
           </address>
         </div>
       </div>
-      <div className="mx-auto mt-14 flex max-w-7xl flex-col justify-between gap-2 border-t border-black/10 pt-6 text-xs text-ink/40 sm:flex-row">
+      <div className="mx-auto mt-14 flex max-w-7xl flex-col items-center justify-between gap-3 border-t border-black/10 pt-6 text-xs text-ink/50 sm:flex-row">
         <p>© {new Date().getFullYear()} Al Kausar Bakers Sweets And Nimco. All rights reserved.</p>
-        <p>Made with pure desi ghee &amp; love.</p>
+        <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1">
+          <span>
+            Crafted with by{" "}
+            <a
+              href="https://hamzanasir.vercel.app" // Yahan apna portfolio, LinkedIn ya WhatsApp link daal dein
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-semibold text-maroon transition hover:underline"
+            >
+              Hamza Nasir
+            </a>
+          </span>
+          <span>•</span>
+          <span>
+            Powered by{" "}
+            <a
+              href="https://hamzanasir.vercel.app" // Yahan apni agency ka link daal sakte hain
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold tracking-wider text-ink transition hover:text-maroon"
+            >
+              HADFORGE
+            </a>
+          </span>
+        </div>
       </div>
     </footer>
   );
