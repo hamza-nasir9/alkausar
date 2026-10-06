@@ -15,7 +15,7 @@ function Card({ id, cover, eyebrow, title, children, delay = 0 }) {
   return (
     <motion.article id={id} initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-60px" }} transition={{ duration: 0.7, delay }} className="scroll-mt-24 overflow-hidden rounded-[2rem] border border-black/10 bg-white shadow-sm">
       <div className="relative h-52">
-        <SmartImage srcs={categoryImages(cover, 1000)} alt="" loading="lazy" className="h-full w-full object-cover" fallback={<div className="h-full w-full bg-gradient-to-br from-gold/40 to-maroon/50" />} />
+        <SmartImage srcs={categoryImages(cover, 1000)} alt="" width={1000} height={420} sizes="(min-width: 1024px) 45vw, 92vw" className="h-full w-full object-cover" fallback={<div className="h-full w-full bg-gradient-to-br from-gold/40 to-maroon/50" />} />
         <div className="absolute inset-0 bg-gradient-to-t from-ink/75 via-ink/10 to-transparent" />
         <div className="absolute bottom-5 left-6 right-6">
           <p className="text-[10px] uppercase tracking-[0.35em] text-gold">{eyebrow}</p>

@@ -52,13 +52,17 @@ export default function CategorySection({ section, index }) {
             <p className="cs-reveal mt-4 max-w-md text-ink/65">{section.blurb}</p>
 
             <div className="cs-reveal relative mt-8 aspect-[4/3] overflow-hidden rounded-[2rem] border border-black/10 bg-cream shadow-sm">
-              <SmartImage
-                srcs={categoryImages(section.id, 1000)}
-                alt={`${section.label} at Al Kausar Bakers`}
-                loading="lazy"
-                className="cs-cover-img absolute inset-x-0 -top-[8%] h-[116%] w-full object-cover"
-                fallback={<div className="absolute inset-0 bg-gradient-to-br from-gold/40 to-maroon/50" />}
-              />
+              <div className="cs-cover-img absolute inset-x-0 -top-[8%] h-[116%] w-full">
+                <SmartImage
+                  srcs={categoryImages(section.id, 1000)}
+                  alt={`${section.label} at Al Kausar Bakers, Karachi`}
+                  width={1000}
+                  height={750}
+                  sizes="(min-width: 1024px) 30vw, 92vw"
+                  className="h-full w-full object-cover"
+                  fallback={<div className="h-full w-full bg-gradient-to-br from-gold/40 to-maroon/50" />}
+                />
+              </div>
               <div className="absolute inset-0 bg-gradient-to-t from-ink/60 via-transparent to-transparent" />
               <p className="absolute bottom-4 left-5 font-display text-xl text-white">{section.label}</p>
             </div>

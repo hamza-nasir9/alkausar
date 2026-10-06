@@ -97,7 +97,6 @@ export default function HeroSlider() {
 
   return (
     <section ref={root} aria-roledescription="carousel" aria-label="Featured banners" className="relative bg-cream">
-      <h1 className="sr-only">Al Kausar Bakers Sweets &amp; Nimco, Saudabad, Karachi</h1>
       <Swiper
         modules={[Autoplay, EffectFade, A11y, Keyboard]}
         effect="fade"
@@ -126,9 +125,12 @@ export default function HeroSlider() {
                     <div className="relative aspect-[4/5] overflow-hidden rounded-t-[999px] rounded-b-[1.6rem] border-[6px] border-white bg-white shadow-[0_30px_80px_rgba(43,22,10,0.22)]">
                       <SmartImage
                         srcs={srcs}
-                        alt={`${s.eyebrow} at Al Kausar Bakers`}
+                        alt={`${s.eyebrow} at Al Kausar Bakers, Karachi`}
+                        width={880}
+                        height={1100}
+                        sizes="(min-width: 1024px) 440px, (min-width: 640px) 320px, 250px"
+                        priority={i === 0}
                         data-img
-                        loading={i === 0 ? "eager" : "lazy"}
                         className="h-full w-full object-cover"
                         fallback={<div className="grid h-full w-full place-items-center bg-gradient-to-b from-gold/40 to-maroon/60 px-6 text-center font-display text-2xl text-white">{s.eyebrow}</div>}
                       />
@@ -142,9 +144,9 @@ export default function HeroSlider() {
                   {/* copy */}
                   <div className="order-2 text-center lg:order-1 lg:text-left">
                     <p data-anim className="mb-4 text-[11px] uppercase tracking-[0.5em] text-maroon">{s.eyebrow}</p>
-                    <h2 data-anim className="font-display text-4xl leading-[1.08] text-ink sm:text-5xl lg:text-6xl xl:text-7xl">
+                    <p data-anim className="font-display text-4xl leading-[1.08] text-ink sm:text-5xl lg:text-6xl xl:text-7xl">
                       {s.title[0]} <span className="gold-text block">{s.title[1]}</span>
-                    </h2>
+                    </p>
                     <p data-anim className="mx-auto mt-5 max-w-lg text-base text-ink/70 lg:mx-0">{s.blurb}</p>
                     <div data-anim className="mt-5 flex flex-wrap justify-center gap-2 lg:justify-start">
                       {s.chips.map((c) => (

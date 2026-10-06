@@ -5,6 +5,7 @@ import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { IMG } from "@/lib/images";
+import SmartImage from "@/components/ui/SmartImage";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -32,7 +33,7 @@ export default function AboutPage() {
   return (
     <div ref={root} className="bg-paper">
       <section className="about-hero relative flex min-h-[70dvh] flex-col justify-end overflow-hidden bg-cream px-5 pb-20 pt-40 sm:px-10">
-        <img src={IMG.bakery} alt="" aria-hidden="true" className="absolute inset-0 h-full w-full object-cover opacity-15" onError={(e) => (e.currentTarget.style.display = "none")} />
+        <SmartImage srcs={[IMG.bakery]} alt="" aria-hidden="true" width={1600} height={900} sizes="100vw" className="absolute inset-0 h-full w-full object-cover opacity-15" />
         <div className="absolute inset-0 bg-gradient-to-t from-cream via-cream/80 to-cream/40" />
         <p className="relative text-[11px] uppercase tracking-[0.5em] text-maroon">Our Heritage</p>
         <h1 className="relative mt-4 max-w-4xl font-display text-5xl leading-[1.05] text-ink sm:text-7xl lg:text-8xl">
