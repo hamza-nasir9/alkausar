@@ -17,6 +17,8 @@ const CATS = [
   { id: "biscuits", label: "Biscuits & Cookies" },
   { id: "bread-rusk", label: "Bread & Rusk" },
   { id: "tea-cakes", label: "Tea Cakes & Pastries" },
+  { id: "regular-cakes", label: "Regular Cakes" },
+  { id: "special-cakes", label: "Special Cakes" },
 ];
 
 export default function Footer() {
@@ -25,86 +27,61 @@ export default function Footer() {
       <div className="mx-auto grid max-w-7xl gap-12 md:grid-cols-4">
         <div>
           <p className="gold-text font-display text-3xl">Al Kausar</p>
-          <p className="text-[10px] uppercase tracking-[0.35em] text-maroon">
-            Bakers · Sweets · Nimco
-          </p>
-          <p className="mt-5 max-w-xs text-sm text-ink/60">
-            A family bakery in Saudabad, crafting mithai, cakes and nimco with
-            pure desi ghee.
-          </p>
+          <p className="text-[10px] uppercase tracking-[0.35em] text-maroon">Bakers · Sweets · Nimco</p>
+          <p className="mt-5 max-w-xs text-sm text-ink/60">A family bakery in Saudabad, crafting mithai, cakes and nimco with pure desi ghee.</p>
         </div>
         <nav aria-label="Footer">
-          <p className="mb-4 text-xs uppercase tracking-[0.3em] text-maroon">
-            Explore
-          </p>
+          <p className="mb-4 text-xs uppercase tracking-[0.3em] text-maroon">Explore</p>
           <ul className="space-y-2">
             {NAV.map((l) => (
-              <li key={l.href}>
-                <Link
-                  href={l.href}
-                  className="text-ink/70 transition hover:text-maroon"
-                >
-                  {l.label}
-                </Link>
-              </li>
+              <li key={l.href}><Link href={l.href} className="text-ink/70 transition hover:text-maroon">{l.label}</Link></li>
             ))}
           </ul>
         </nav>
         <nav aria-label="Categories">
-          <p className="mb-4 text-xs uppercase tracking-[0.3em] text-maroon">
-            Our Range
-          </p>
+          <p className="mb-4 text-xs uppercase tracking-[0.3em] text-maroon">Our Range</p>
           <ul className="space-y-2">
             {CATS.map((c) => (
-              <li key={c.id}>
-                <Link
-                  href={`/menu?category=${c.id}`}
-                  className="text-ink/70 transition hover:text-maroon"
-                >
-                  {c.label}
-                </Link>
-              </li>
+              <li key={c.id}><Link href={`/menu?category=${c.id}`} className="text-ink/70 transition hover:text-maroon">{c.label}</Link></li>
             ))}
           </ul>
         </nav>
         <div>
-          <p className="mb-4 text-xs uppercase tracking-[0.3em] text-maroon">
-            Visit &amp; Order
-          </p>
+          <p className="mb-4 text-xs uppercase tracking-[0.3em] text-maroon">Visit &amp; Order</p>
           <address className="space-y-2 text-sm not-italic text-ink/70">
             <p>Saudabad Khokhrapar, Malir, Karachi</p>
             <p>Open daily till 1:00 AM</p>
-            <a
-              href="tel:+923182736676"
-              className="block text-ink transition hover:text-maroon"
-            >
-              +92 318 2736676
-            </a>
-            <a
-              href="https://wa.me/923182736676"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block text-ink transition hover:text-maroon"
-            >
-              Order on WhatsApp
-            </a>
+            <a href="tel:+923182736676" className="block text-ink transition hover:text-maroon">+92 318 2736676</a>
+            <a href="https://wa.me/923182736676" target="_blank" rel="noopener noreferrer" className="block text-ink transition hover:text-maroon">Order on WhatsApp</a>
           </address>
         </div>
       </div>
-      <div className="mx-auto mt-14 flex max-w-7xl flex-col justify-between gap-2 border-t border-black/10 pt-6 text-xs text-ink/40 sm:flex-row">
-        <p>
-          © {new Date().getFullYear()} Al Kausar Bakers Sweets And Nimco. All
-          rights reserved.
-        </p>
+   
+<div className="mx-auto mt-14 flex max-w-7xl flex-col justify-between gap-3 border-t border-black/10 pt-6 text-xs text-ink/40 sm:flex-row sm:items-center">
+  <p>
+    © {new Date().getFullYear()} Al Kausar Bakers Sweets And Nimco. All rights reserved.
+  </p>
 
-        <p>
-          Produced by{" "}
-          <span className="font-semibold text-maroon">HADFORGE</span> |
-          Lead: <span className="font-semibold text-maroon">Hamza Nasir</span> &amp;
-          Co-Dev:{" "}
-          <span className="font-semibold text-maroon">Ayesha Urooj</span>
-        </p>
-      </div>
+  <p>
+    Made with pure desi ghee &amp; love.
+  </p>
+
+  <p>
+    Led by{" "}
+    <a
+      href="https://hamznasir.vercel.app/"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="text-maroon font-bold transition "
+    >
+      Hamza Nasir
+    </a>
+    {" "}· Co-developed by{" "}
+    <span className="text-maroon font-bold">Ayesha Urooj</span>
+  </p>
+</div>
+```
+
     </footer>
   );
 }

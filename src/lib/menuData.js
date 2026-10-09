@@ -9,6 +9,8 @@ export const CATEGORIES = [
   { id: "bread-rusk", label: "Bread & Rusk" },
   { id: "tea-cakes", label: "Tea Cakes & Pastries" },
   { id: "cakes", label: "Custom Cakes" },
+  { id: "regular-cakes", label: "Regular Cakes" },
+  { id: "special-cakes", label: "Special Cakes" },
 ];
 
 // Item price is per 1x unit: 500g for "kg", 1 lb for "cake", 1 piece for "piece", 1 box for "box".
@@ -56,6 +58,7 @@ export const MENU = [
   { id: "sp-kaju-katli", name: "Kaju Katli", category: "special-mithai", set: "kg", price: 2800, tag: "Premium", desc: "Diamond-cut cashew fudge with a silky finish.", hue: ["#c9a24a", "#3a2a08"] },
   { id: "sp-akhrot-halwa", name: "Akhrot Halwa", category: "special-mithai", set: "kg", price: 3000, tag: "Special", desc: "Rich walnut halwa, slow-cooked in ghee.", hue: ["#7a4a1c", "#1a0d04"] },
   { id: "sp-gift-classic", name: "Classic Mithai Gift Box", category: "special-mithai", set: "box", price: 1800, tag: "Gift Pack", desc: "An assortment of our classic mithai in a neat gift box.", hue: ["#d4af37", "#5a3a08"] },
+  { id: "sp-cham-cham-box", name: "Special Cham Cham Mithai Box", category: "special-mithai", set: "box", price: 2200, tag: "Special Box", desc: "A gift-ready box of soft, coconut-finished cham cham sweets.", hue: ["#f1d9c0", "#7a4a1c"] },
   { id: "sp-gift-dryfruit", name: "Premium Dry Fruit Gift Box", category: "special-mithai", set: "box", price: 3500, tag: "Gift Pack", desc: "Dry fruit sweets and mixed nuts in a premium box.", hue: ["#a8742a", "#1a0d04"] },
   { id: "sp-gift-eid", name: "Eid Assorted Mithai Box", category: "special-mithai", set: "box", price: 2500, tag: "Festive", desc: "A festive selection made for Eid and family gatherings.", hue: ["#c2571a", "#2B090A"] },
   { id: "sp-kaju-barfi", name: "Kaju Barfi", category: "special-mithai", set: "kg", price: 2600, desc: "Smooth cashew barfi, lightly sweet and melt-in-mouth.", hue: ["#e8d9a5", "#3a2a08"] },
@@ -119,4 +122,16 @@ export const MENU = [
   { id: "ck-red-velvet", name: "Red Velvet Cake", category: "cakes", set: "cake", price: 2200, desc: "Velvety crimson layers with cream cheese frosting.", hue: ["#9b1c2b", "#2B090A"] },
   { id: "ck-mango", name: "Mango Delight Cake", category: "cakes", set: "cake", price: 2000, tag: "Seasonal", desc: "Fresh mango cream over vanilla sponge.", hue: ["#f2b13c", "#3d1a05"] },
   { id: "ck-vanilla", name: "Vanilla Bean Cake", category: "cakes", set: "cake", price: 1700, desc: "Light bean-flecked sponge with whipped vanilla cream.", hue: ["#f0dfb5", "#4a3a1a"] },
+
+  // ---- Regular Cakes ----
+  { id: "rc-plain", name: "Classic Vanilla Cake", category: "regular-cakes", set: "cake", price: 1500, desc: "Soft vanilla sponge finished with a light cream topping.", hue: ["#f0dfb5", "#7a4a1c"] },
+  { id: "rc-chocolate", name: "Chocolate Cream Cake", category: "regular-cakes", set: "cake", price: 1800, desc: "Chocolate sponge layered with smooth chocolate cream.", hue: ["#5a2a1a", "#1a0806"] },
+  { id: "rc-pineapple", name: "Pineapple Cake", category: "regular-cakes", set: "cake", price: 1700, desc: "Vanilla sponge, pineapple filling and fresh cream.", hue: ["#f2d36a", "#7a4a1c"] },
+  { id: "rc-black-forest", name: "Black Forest Cake", category: "regular-cakes", set: "cake", price: 1900, desc: "Chocolate sponge with cream and cherry accents.", hue: ["#5a1a1a", "#120805"] },
+
+  // ---- Special Cakes ----
+  { id: "sc-lotus", name: "Lotus Biscoff Cake", category: "special-cakes", set: "cake", price: 2800, tag: "Special", desc: "Creamy cake finished with caramelised biscuit spread and crumb.", hue: ["#c9a06a", "#3a1f08"] },
+  { id: "sc-three-milk", name: "Three Milk Cake", category: "special-cakes", set: "cake", price: 2600, tag: "Signature", desc: "Soft sponge soaked in a rich three-milk mixture.", hue: ["#f0dfb5", "#7a4a1c"] },
+  { id: "sc-oreo", name: "Oreo Crunch Cake", category: "special-cakes", set: "cake", price: 2700, desc: "Chocolate sponge with cookies-and-cream filling and Oreo crumb.", hue: ["#5a2a1a", "#1a0806"] },
+  { id: "sc-red-velvet", name: "Red Velvet Celebration Cake", category: "special-cakes", set: "cake", price: 2800, desc: "Red velvet layers with a smooth cream-cheese-style frosting.", hue: ["#9b1c2b", "#2B090A"] },
 ];

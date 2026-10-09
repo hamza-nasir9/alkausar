@@ -20,12 +20,12 @@ export const metadata = {
   applicationName: SITE.shortName,
   title: { default: SITE.title, template: `%s | ${SITE.shortName}` },
   description: SITE.description,
-  keywords: SITE.keywords,
+  keywords: SITE.keywords, // Google ignores meta keywords; harmless, and used by some other engines
   authors: [{ name: SITE.name }],
   creator: SITE.name,
   publisher: SITE.name,
   category: "food",
-  alternates: { canonical: "/" },
+  alternates: { canonical: "/" }, // every other page sets its own canonical via pageMeta()
   openGraph: {
     type: "website",
     siteName: SITE.name,
@@ -37,10 +37,8 @@ export const metadata = {
   },
   twitter: { card: "summary_large_image", title: SITE.title, description: SITE.description, images: [SITE.ogImage.path] },
   robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1, "max-video-preview": -1 } },
-  // Google Search Console verification tag add kar diya hai:
-  verification: {
-    google: "DFfuEhw2B1O7neYHlklZ_TzNqNQoPVlCeS8rsuyuq7s",
-  },
+  // Paste your Search Console token into NEXT_PUBLIC_GSC_TOKEN (Vercel env) to verify the site.
+  ...(process.env.NEXT_PUBLIC_GSC_TOKEN ? { verification: { google: process.env.NEXT_PUBLIC_GSC_TOKEN } } : {}),
 };
 
 export const viewport = { themeColor: "#FFFFFF", width: "device-width", initialScale: 1 };

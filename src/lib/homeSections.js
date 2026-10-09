@@ -73,4 +73,22 @@ export const HOME_SECTIONS = [
     blurb: "Loaf cakes for the tea tray and pastries for a sweet finish.",
     cta: "See cakes & pastries",
   },
+  {
+    id: "regular-cakes",
+    label: "Regular Cakes",
+    eyebrow: "Everyday Celebrations",
+    title: "Classic cakes,",
+    accent: "made to share.",
+    blurb: "Vanilla, chocolate, pineapple and Black Forest favourites for birthdays and everyday treats.",
+    cta: "Explore regular cakes",
+  },
+  {
+    id: "special-cakes",
+    label: "Special Cakes",
+    eyebrow: "Signature Cake Counter",
+    title: "A little more",
+    accent: "extra special.",
+    blurb: "Rich, celebratory cakes with indulgent flavours for the moments worth marking.",
+    cta: "Explore special cakes",
+  },
 ];
