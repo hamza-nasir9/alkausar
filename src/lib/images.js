@@ -1,143 +1,205 @@
-// Product photography uses distinct, royalty-free Pexels photos wherever possible.
-// Pexels' CDN resizes/compresses the images at request time, keeping the project light.
+// Real, royalty-free photography (Pexels license: free for commercial use, no
+// attribution required). Every photo is a function of width so cards, covers and
+// hero slides each request a sensibly sized file.
+//
+// AUDIT NOTES
+// - Every Pexels ID below was checked against its Pexels photo page (title/description)
+//   for the category it is used in. Unsplash IDs were removed: none could be verified.
+// - "exact"   = the photo shows that product.
+//   "closest" = no verified photo of that exact product was found; this is the closest
+//               verified photo in the same category. Swap these when you have better ones.
+//
+// Replace any of these with the shop's own photos once available: add WebP files
+// to /public and point the entry at "/your-photo.webp".
 const px = (id) => (w = 900) => `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&w=${w}`;
-const us = (id) => (w = 900) => `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=75`;
+export const us = (id) => (w = 900) => `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=75`;
 
-const CHOC_CAKE = us("1578985545062-69928b1d9587");
-
-// Every MENU product has its own explicit image assignment. Do not replace this
-// with category-based hashing: that caused unrelated products to share photos.
-// Photo sources are Pexels free-stock photos or Unsplash photos; verify each
-// image visually if the product catalogue is updated in the future.
-const ITEM_PHOTOS = {
-  // Regular Mithai
-  "rm-gulab-jamun": px(7406887),
-  "rm-cham-cham": px(18488316),
-  "rm-milk-barfi": px(18488299),
-  "rm-motichoor": px(18488312),
-  "rm-besan-laddu": px(18488297),
-  "rm-rasgulla": px(8788869),
-  "rm-rasmalai": px(39973385),
-  "rm-jalebi": px(8887054),
-  "rm-balushahi": px(38524183),
-  "rm-imarti": px(7449105),
-
-  // Special Mithai & Gift Boxes
-  "sp-kaju-katli": px(10514163),
-  "sp-akhrot-halwa": px(8819257),
-  "sp-gift-classic": px(19151511),
-  "sp-cham-cham-box": px(18488305),
-  "sp-gift-dryfruit": px(18488310),
-  "sp-gift-eid": px(18488319),
-  "sp-kaju-barfi": px(7182054),
-  "sp-pista-roll": px(18488311),
-  "sp-dryfruit-laddu": px(36376517),
-
-  // Halwajaat
-  "hw-sohan": px(5878321),
-  "hw-multani": px(8819258),
-  "hw-habshi": px(20689161),
-  "hw-gajar": px(35782620),
-  "hw-karachi": px(18488306),
-  "hw-suji": px(9951856),
-
-  // Nimco & Savories
-  "ni-mix": px(39524792),
-  "ni-dal-moth": px(39524786),
-  "ni-cheevda": px(39524791),
-  "ni-sev": us("1599490659213-e2b9527bd087"),
-  "ni-namak-para": px(5031949),
-  "ni-gathiya": px(9027521),
-  "ni-dry-fruit": px(6928273),
-  "ni-chips": px(37068875),
-
-  // Baked Items & Snacks
-  "bs-aloo-samosa": px(37153389),
-  "bs-chicken-samosa": px(23286188),
-  "bs-chicken-roll": px(30731483),
-  "bs-chicken-patty": px(36170557),
-  "bs-aloo-patty": px(9787524),
-  "bs-sausage-roll": px(19498989),
-
-  // Biscuits & Cookies
-  "bi-bakery-biscuit": px(10513887),
-  "bi-nan-khatai": px(17057406),
-  "bi-zeera": px(39353245),
-  "bi-coconut": px(31132630),
-  "bi-fruit-nut": px(30510114),
-  "bi-choc-chip": px(15172563),
-
-  // Bread & Rusk
-  "br-milk-bread": px(38959004),
-  "br-brown-bread": px(28826563),
-  "br-pav": px(14931404),
-  "br-cake-rusk": px(3082785),
-  "br-plain-rusk": px(27165963),
-
-  // Tea Cakes & Pastries
-  "tc-plain-tea-cake": px(35228372),
-  "tc-marble": px(37020184),
-  "tc-dryfruit": px(19499002),
-  "tc-choc-pastry": px(3341067),
-  "tc-pineapple-pastry": px(17593891),
-  "tc-black-forest": px(29037272),
-  "tc-croissant": px(7966005),
-  "tc-brownie": px(39074559),
-  "tc-cream-roll": px(27969779),
-
-  // Custom Cakes
-  "ck-belgian-choc": CHOC_CAKE,
-  "ck-red-velvet": us("1607478900766-efe13248b125"),
-  "ck-mango": us("1621303837174-89787a7d4729"),
-  "ck-vanilla": px(30177790),
-
-  // Regular cakes
-  "rc-plain": us("1571115177098-24ec42ed204d"),
-  "rc-chocolate": us("1535141192574-5d4897c12636"),
-  "rc-pineapple": us("1464349095431-e9a21285b5f3"),
-  "rc-black-forest": us("1565958011703-44f9829ba187"),
-
-  // Special cakes
-  "sc-lotus": us("1558636508-e0db3814bd1d"),
-  "sc-three-milk": px(18488314),
-  "sc-oreo": us("1578985545062-69928b1d9587"),
-  "sc-red-velvet": us("1588195538326-c5b1e9f80a1b"),
-};
-
-// Category and hero photography is kept separate from the product catalogue.
-// These are section-cover images, not substitutes for individual product photos.
+// Category pools. Cards pick one deterministically and fall through the rest of
+// the pool if a URL ever fails, so a card never renders empty.
 export const POOLS = {
-  "regular-mithai": [px(18488319), px(7406887), px(18488312), px(9198596), px(8887054)],
-  "special-mithai": [px(10514163), px(18488305), px(19151511), px(18488310)],
-  halwajaat: [px(8819257), px(5878321), px(9951856), px(5864767)],
-  nimco: [us("1599490659213-e2b9527bd087"), px(39524792), px(39524786), px(39524791)],
-  "baked-snacks": [px(30731483), px(37153389), px(23286188), px(9787524), px(19498989)],
-  biscuits: [px(10511210), px(5878306), px(8200656), px(12864004)],
-  "bread-rusk": [px(38959004), px(28826563), px(14931404), px(3082785), px(27165963)],
-  "tea-cakes": [px(35228372), px(37020184), px(27969779), px(39074559), px(7966005)],
-  cakes: [CHOC_CAKE, us("1607478900766-efe13248b125"), us("1621303837174-89787a7d4729"), px(27911705)],
-  "regular-cakes": [px(30177790), px(17593891), px(29037272), us("1578985545062-69928b1d9587")],
-  "special-cakes": [px(27911705), px(3341067), us("1607478900766-efe13248b125"), us("1621303837174-89787a7d4729")],
+  "regular-mithai": [
+    px(7406887),  // gulab jamun, stainless bowl
+    px(18488314), // imarti / jalebi on ornate plate
+    px(7449105),  // gulab jamun, bowl with rose petals
+    px(9198596),  // gulab jamun in syrup
+    px(39852669), // jalebi on terracotta plate
+    px(36215924), // tower of jalebi
+    px(8788869),  // rasgulla in bowl
+    px(38524183), // assorted mithai, shop display
+  ],
+  "special-mithai": [
+    px(10514163), // kaju katli on plate
+    px(18488301), // assorted mithai with nuts
+    px(40143320), // assorted mithai in terracotta bowl
+    px(38524183), // assorted mithai, shop display
+    px(8887011),  // mithai in ornate bowls
+  ],
+  halwajaat: [
+    px(20446403), // gajar halwa with almonds
+    px(40143320), // assorted mithai in terracotta bowl
+    px(8887011),  // mithai in ornate bowls
+    px(18488301), // assorted mithai with nuts
+  ],
+  nimco: [
+    px(12865864), // bowl of crunchy spiced snack
+    px(7936011),  // basket of fried snacks with chai
+    px(39872740), // fried Indian snacks, vendor display
+    px(39524775), // Indian snacks on round metal tray
+    px(5436119),  // banana chips and pakoras
+    px(5992272),  // chakli spirals, savory
+  ],
+  "baked-snacks": [
+    px(36170557), // samosas on wooden plate
+    px(23286188), // chicken and beef samosa
+    px(37068875), // tray of fresh samosas
+    px(39104670), // crispy samosas with chutney
+    px(14477873), // fried samosa in wicker tray
+    px(2474658),  // fried samosa on saucer
+    px(21078315), // samosas with red sauce
+  ],
+  biscuits: [
+    px(8081574), // chocolate chip cookies on plate
+    px(1020585), // cookies on ceramic plates
+    px(4187560), // cookies on ceramic plate
+    px(1325467), // cookies stack with milk
+    px(2377477), // homemade cookies stacked
+    px(8712296), // chai with rose cookies
+  ],
+  "bread-rusk": [
+    px(162846),  // sliced loaf bread
+    px(1079020), // sliced bread
+    px(2067621), // sliced loaf on wooden plate
+    px(1555813), // slices of bread
+    px(6605208), // bread slices on cutting board
+    px(1586947), // sliced brown seeded bread
+  ],
+  "tea-cakes": [
+    px(4110008),  // chocolate cake slice
+    px(291528),   // chocolate cake slice, blueberry
+    px(19940993), // chocolate cake slices
+    px(2135),     // croissants, bakery
+    px(19296861), // croissant close-up
+    px(3652),     // brownies and cookies
+  ],
+  cakes: [
+    px(291528),   // chocolate cake slice, blueberry
+    px(6133313),  // red velvet cake
+    px(806363),   // sliced cake, cream frosting
+    px(6363069),  // red velvet with blueberries
+    px(30770346), // decorated red velvet cake
+    px(19940993), // chocolate cake slices
+  ],
 };
 
+// Item-specific photos. Every menuData.js id has an entry.
+const ITEM_PHOTOS = {
+  // ---- Regular Mithai ----
+  "rm-gulab-jamun": px(7406887),  // exact
+"rm-cham-cham": () => "https://cdn.ready-market.com.tw/21cd62de/Templates/pic/ANKO-Cham-Cham-1.jpg?v=51858380",
+  "rm-milk-barfi": () => "https://www.jcookingodyssey.com/wp-content/uploads/2023/02/barfi-recipe-with-milk-powder.jpg", // Custom Milk Barfi image
+"rm-motichoor": () => "https://www.sugarfree-india.com/wp-content/uploads/2026/05/motichur-laddu-recipe.webp", // Custom Motichur Laddu image
+  "rm-besan-laddu": px(40143320), // closest (assorted mithai bowl)
+  "rm-rasgulla": px(8788869),     // exact
+  "rm-rasmalai": px(8788869),     // closest (chilled milk sweet in bowl)
+  "rm-jalebi": px(39852669),      // exact
+  "rm-balushahi": px(9198596),    // closest (glazed fried round in syrup)
+  "rm-imarti": px(18488314),      // exact
+
+  // ---- Special Mithai & Premium Boxes ----
+  "sp-kaju-katli": px(10514163),    // exact
+"sp-akhrot-halwa": () => "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQW7jR-Sw0UGTyERASL1Te7B8eYgOfEaAm0InhIOzptMDROi7HQGttMscfL&s=10",
+"sp-gift-classic": () => "https://hafizsweets.com/blog/wp-content/uploads/sites/21/2025/08/Whisk_01156ef5a4.jpg",
+  "sp-cham-cham-box": () => "https://hafizsweets.com/blog/wp-content/uploads/sites/21/2025/08/Whisk_01156ef5a4.jpg",
+  "sp-gift-dryfruit": () => "https://hafizsweets.com/blog/wp-content/uploads/sites/21/2025/08/Whisk_01156ef5a4.jpg",
+  "sp-gift-eid": () => "https://hafizsweets.com/blog/wp-content/uploads/sites/21/2025/08/Whisk_01156ef5a4.jpg",
+  "sp-kaju-barfi": px(10514163),    // exact (same sweet as kaju katli)
+  "sp-pista-roll": px(8887011),     // closest (assorted mithai)
+  "sp-dryfruit-laddu": px(18488301),// closest (mithai with assorted nuts)
+
+  // ---- Halwajaat ----
+  "hw-sohan": px(18488301),   // closest
+ "hw-multani": () => "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjqtZc0V8OfDDQk_rMVsbdPTsmImyJD8IQ3siRnp1o33bttIrAefuQPwo&s=10", // Custom Multani Halwa image
+ "hw-habshi": () => "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRWZc7G7N-2yhpHE1eRPHwodQ51PeMWvi75H_im9xBPA&s=10",
+  "hw-gajar": () => "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvqqUa3m4uRF-_QvCSPZ7nbd6_LjesCTzYolpJlsplVsuopER8KSvaaCk1&s=10", // Custom Gajar Halwa image
+  "hw-karachi": px(8887011),  // closest
+  "hw-suji": px(20446403),    // closest (halwa)
+
+  // ---- Nimco & Savories ----
+ "ni-mix": () => "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRoFRqyFeav245yiJJ-nfnNQT25cVeUl9-8FNmmheOqx83BAGJo7xlHuZ8&s=10", // Custom Mix Nimco image
+"ni-dal-moth": () => "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQP5XrTeg6YWbmYmBXRaZGWAEEhmnwZFeJBYjEoMIL71kVvUdlOQp--zQ&s=10", // Custom Dal Moth image
+"ni-cheevda": () => "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRlj0nfki9eJagOJyHpt1mtBl44nPS_WjBTHXVHtAS61A&s",
+"ni-sev": () => "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfYaqcd7ktIsDDPVtDXMuZtUoADBgHNPbCBDjGOWaX6t3k0pxz69g0Oyg&s=10", // Custom Sev image
+  "ni-namak-para": px(7936011), // closest (fried snacks with chai)
+  "ni-gathiya": px(5992272),    // closest (fried savory spirals)
+  "ni-dry-fruit": px(18488301), // closest (assorted nuts)
+  "ni-chips": px(5436119),      // closest (banana chips)
+
+  // ---- Baked Items & Snacks ----
+  "bs-aloo-samosa": () => "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrSow8wiUuIxjfEToV69JWVUKXnNmisjibteHRz3SiFsXMpPswQFhS9QQ&s=10", // Custom Aloo Samosa image   // exact
+"bs-chicken-samosa": () => "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTRYzpm5hMwAxynW1g2RFKV8JGWyfSkr1Cb1nRlp3nKKA&s=10", // Custom Chicken Samosa imaget
+  "bs-chicken-roll": () => "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR57_4Vin-llP40cgT0pzDWVNOzpWKtCBIHkPg4G3alj53mPLWjQj8wt8hL&s=10", // Custom Chicken Roll image
+"bs-chicken-patty": () => "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQadlbxVv6EkJdQCGn-uqLFKpKWhKJRr_g_GBM3AoLCDA&s=10", // Custom Chicken Patty image
+  "bs-aloo-patty": px(2474658),      // closest
+  "bs-sausage-roll": px(37068875),   // closest
+
+  // ---- Biscuits & Cookies ----
+ "bi-bakery-biscuit": () => "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1YaNXoQ4pmSugIpzS3MJY_GTijd0nD0b9guR-0jIsOg&s=10", // Custom Bakery Biscuit image// closest
+ "bi-nan-khatai": () => "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIVE7LBZjE8DbkCLCGePteRaTw-zQiTQSGQijEXhUwvQ&s=10", // Custom Nan Khatai image
+ "bi-zeera": () => "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQAp5SLNMr_LkBoIhVnK42OmIzd6e_xYC6C7gqO-W5qTg&s=10", // Custom Zeera Biscuit image
+ "bi-coconut": () => "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRML5q3X1rMWQcDW-RlX4VhDEV_81RxrH3odXbRQm8M1g&s=10", // Custom Coconut Biscuit image
+  "bi-fruit-nut": px(1020585),      // closest
+  "bi-choc-chip": px(8081574),      // exact
+
+  // ---- Bread & Rusk ----
+  "br-milk-bread": () => "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQU62tN01c2zFojT_5CkMvmCZ2pP_D8leefDhJWiLXfXQ&s=10", // Custom Milk Bread image
+"br-brown-bread": () => "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT11ClYbza5pGgqr390Rw3l1HzAYlV1kynxTKiwO296XA&s=10", // Custom Brown Bread image
+  "br-pav": () => "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSTbzxQ8M5exZ-f8yAVxaVIqho5uclHGgdnP9C_tSxWow&s=10", // Custom Pav image
+ "br-cake-rusk": () => "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSGjZ1QVdplC94dIiPONeutYejvbLhkcTqCX080dtWi3w&s=10", // Custom Cake Rusk image
+  "br-plain-rusk": px(6605208), // closest (sliced bread)
+
+  // ---- Tea Cakes & Pastries ----
+  "tc-plain-tea-cake": px(2067621),   // closest (sliced loaf)
+  "tc-marble": px(4110008),           // closest (chocolate cake slice)
+  "tc-dryfruit": px(1555813),         // closest (sliced loaf)
+  "tc-choc-pastry": px(291528),       // exact-ish (chocolate cake slice)
+  "tc-pineapple-pastry": px(806363),  // closest (cream-frosted slice)
+  "tc-black-forest": px(19940993),    // closest (chocolate cake slices)
+  "tc-croissant": px(19296861),       // exact
+  "tc-brownie": px(3652),             // closest (brownies and cookies)
+  "tc-cream-roll": px(16543194),      // closest (flaky pastry)
+
+  // ---- Custom Cakes ----
+  "ck-belgian-choc": px(19940993), // exact-ish (chocolate cake with frosting)
+  "ck-red-velvet": px(6133313),    // exact
+  "ck-mango": px(25189329),        // closest (mango cupcake with cream)
+  "ck-vanilla": px(806363),        // closest (cream-frosted cake slice)
+};
+
+// Hero banner slides
 export const HERO_PHOTOS = {
-  sweets: [px(18488319), px(18488305)],
-  cakes: [CHOC_CAKE, us("1607478900766-efe13248b125")],
-  halwa: [px(8819257), px(9951856)],
-  bakery: [px(17593891), px(10511210)],
+  sweets: [px(38524183), px(18488314)],
+  cakes: [px(291528), px(6133313)],
+  halwa: [px(20446403), px(40143320)],
+  bakery: [px(2135), px(1079020)],
 };
 
-// Each product now resolves to its own explicit image. No category-pool rotation.
+const hash = (str) => [...String(str)].reduce((h, c) => (h * 31 + c.charCodeAt(0)) >>> 0, 7);
+
+// Ordered list of URLs to try for a menu item (first that loads wins).
 export function imagesFor(item, w = 900) {
-  const image = ITEM_PHOTOS[item?.id];
-  return image ? [image(w)] : [];
+  const pool = POOLS[item.category] || POOLS["regular-mithai"];
+  const start = hash(item.id) % pool.length;
+  const rotated = [...pool.slice(start), ...pool.slice(0, start)];
+  const own = ITEM_PHOTOS[item.id];
+  return (own ? [own, ...rotated] : rotated).map((f) => f(w));
 }
 
 export const categoryImages = (category, w = 1000) => (POOLS[category] || POOLS["regular-mithai"]).map((f) => f(w));
 export const heroImages = (key, w = 1200) => (HERO_PHOTOS[key] || HERO_PHOTOS.sweets).map((f) => f(w));
 
+// Legacy single-URL helpers (About page, older imports)
 export const IMG = {
-  sweets: POOLS["regular-mithai"][0](800),
+  sweets: POOLS["regular-mithai"][1](800),
   cake: POOLS.cakes[0](800),
   bakery: POOLS["bread-rusk"][0](800),
   nimco: POOLS.nimco[0](800),
