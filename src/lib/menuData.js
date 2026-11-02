@@ -13,6 +13,13 @@ export const CATEGORIES = [
   { id: "special-cakes", label: "Special Cakes" },
 ];
 
+// Added missing CAKE_GROUPS export to fix Vercel build error
+export const CAKE_GROUPS = [
+  { id: "cakes", label: "Custom Cakes" },
+  { id: "regular-cakes", label: "Regular Cakes" },
+  { id: "special-cakes", label: "Special Cakes" },
+];
+
 // Item price is per 1x unit: 500g for "kg", 1 lb for "cake", 1 piece for "piece", 1 box for "box".
 export const WEIGHT_SETS = {
   kg: [
@@ -40,7 +47,6 @@ export const WEIGHT_SETS = {
 
 export const UNIT_LABEL = { kg: "per 500g", cake: "per lb", piece: "per piece", box: "per box" };
 
-// Placeholder PKR prices. Replace with your real menu, then copy this file to backend/data/menu.js.
 export const MENU = [
   // ---- Regular Mithai ----
   { id: "rm-gulab-jamun", name: "Gulab Jamun", category: "regular-mithai", set: "kg", price: 1400, tag: "Bestseller", desc: "Soft khoya rounds soaked in cardamom syrup.", hue: ["#8a3b12", "#2B090A"] },
@@ -88,7 +94,7 @@ export const MENU = [
   { id: "bs-chicken-samosa", name: "Chicken Samosa", category: "baked-snacks", set: "piece", price: 70, desc: "Golden samosa with a spiced chicken filling.", hue: ["#c98a3a", "#2a1505"] },
   { id: "bs-chicken-roll", name: "Chicken Roll", category: "baked-snacks", set: "piece", price: 120, desc: "Crumb-coated roll filled with seasoned chicken.", hue: ["#d9a04a", "#3a1f08"] },
   { id: "bs-chicken-patty", name: "Chicken Patty", category: "baked-snacks", set: "piece", price: 180, desc: "Buttery puff pastry with a spiced chicken filling.", hue: ["#c98a3a", "#2a1505"] },
-  { id: "bs-aloo-patty", name: "Aloo Patty", category: "baked-snacks", set: "piece", price: 100, desc: "Flaky puff pastry with a spiced potato filling.", hue: ["#d9a84a", "#3a2a08"] },
+  { id: "bs-aloo-patty", name: "Aloo Patty", category: "baked-snacks", set: "piece", price: 100, desc: "Flaky puff pastry with a spiced potato filling.", hue: ["#d9a84a", "#3a1f08"] },
   { id: "bs-sausage-roll", name: "Sausage Roll", category: "baked-snacks", set: "piece", price: 130, desc: "Puff pastry wrapped around a seasoned sausage.", hue: ["#c98a3a", "#3a1f08"] },
 
   // ---- Biscuits & Cookies ----
