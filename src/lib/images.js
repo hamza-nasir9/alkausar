@@ -92,12 +92,12 @@ export const POOLS = {
 };
 
 // Item-specific photos. Every menuData.js id has an entry.
-const ITEM_PHOTOS = {
+export const ITEM_PHOTOS = {
   // ---- Regular Mithai ----
   "rm-gulab-jamun": px(7406887),  // exact
-"rm-cham-cham": () => "https://cdn.ready-market.com.tw/21cd62de/Templates/pic/ANKO-Cham-Cham-1.jpg?v=51858380",
-  "rm-milk-barfi": () => "https://www.jcookingodyssey.com/wp-content/uploads/2023/02/barfi-recipe-with-milk-powder.jpg", // Custom Milk Barfi image
-"rm-motichoor": () => "https://www.sugarfree-india.com/wp-content/uploads/2026/05/motichur-laddu-recipe.webp", // Custom Motichur Laddu image
+  "rm-cham-cham": () => "https://cdn.ready-market.com.tw/21cd62de/Templates/pic/ANKO-Cham-Cham-1.jpg?v=51858380",
+  "rm-milk-barfi": () => "https://www.jcookingodyssey.com/wp-content/uploads/2023/02/barfi-recipe-with-milk-powder.jpg",
+  "rm-motichoor": () => "https://www.sugarfree-india.com/wp-content/uploads/2026/05/motichur-laddu-recipe.webp",
   "rm-besan-laddu": px(40143320), // closest (assorted mithai bowl)
   "rm-rasgulla": px(8788869),     // exact
   "rm-rasmalai": px(8788869),     // closest (chilled milk sweet in bowl)
@@ -107,8 +107,8 @@ const ITEM_PHOTOS = {
 
   // ---- Special Mithai & Premium Boxes ----
   "sp-kaju-katli": px(10514163),    // exact
-"sp-akhrot-halwa": () => "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQW7jR-Sw0UGTyERASL1Te7B8eYgOfEaAm0InhIOzptMDROi7HQGttMscfL&s=10",
-"sp-gift-classic": () => "https://hafizsweets.com/blog/wp-content/uploads/sites/21/2025/08/Whisk_01156ef5a4.jpg",
+  "sp-akhrot-halwa": () => "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQW7jR-Sw0UGTyERASL1Te7B8eYgOfEaAm0InhIOzptMDROi7HQGttMscfL&s=10",
+  "sp-gift-classic": () => "https://hafizsweets.com/blog/wp-content/uploads/sites/21/2025/08/Whisk_01156ef5a4.jpg",
   "sp-cham-cham-box": () => "https://hafizsweets.com/blog/wp-content/uploads/sites/21/2025/08/Whisk_01156ef5a4.jpg",
   "sp-gift-dryfruit": () => "https://hafizsweets.com/blog/wp-content/uploads/sites/21/2025/08/Whisk_01156ef5a4.jpg",
   "sp-gift-eid": () => "https://hafizsweets.com/blog/wp-content/uploads/sites/21/2025/08/Whisk_01156ef5a4.jpg",
@@ -118,43 +118,43 @@ const ITEM_PHOTOS = {
 
   // ---- Halwajaat ----
   "hw-sohan": px(18488301),   // closest
- "hw-multani": () => "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjqtZc0V8OfDDQk_rMVsbdPTsmImyJD8IQ3siRnp1o33bttIrAefuQPwo&s=10", // Custom Multani Halwa image
- "hw-habshi": () => "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRWZc7G7N-2yhpHE1eRPHwodQ51PeMWvi75H_im9xBPA&s=10",
-  "hw-gajar": () => "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvqqUa3m4uRF-_QvCSPZ7nbd6_LjesCTzYolpJlsplVsuopER8KSvaaCk1&s=10", // Custom Gajar Halwa image
+  "hw-multani": () => "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjqtZc0V8OfDDQk_rMVsbdPTsmImyJD8IQ3siRnp1o33bttIrAefuQPwo&s=10",
+  "hw-habshi": () => "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRWZc7G7N-2yhpHE1eRPHwodQ51PeMWvi75H_im9xBPA&s=10",
+  "hw-gajar": () => "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvqqUa3m4uRF-_QvCSPZ7nbd6_LjesCTzYolpJlsplVsuopER8KSvaaCk1&s=10",
   "hw-karachi": px(8887011),  // closest
   "hw-suji": px(20446403),    // closest (halwa)
 
   // ---- Nimco & Savories ----
- "ni-mix": () => "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRoFRqyFeav245yiJJ-nfnNQT25cVeUl9-8FNmmheOqx83BAGJo7xlHuZ8&s=10", // Custom Mix Nimco image
-"ni-dal-moth": () => "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQP5XrTeg6YWbmYmBXRaZGWAEEhmnwZFeJBYjEoMIL71kVvUdlOQp--zQ&s=10", // Custom Dal Moth image
-"ni-cheevda": () => "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRlj0nfki9eJagOJyHpt1mtBl44nPS_WjBTHXVHtAS61A&s",
-"ni-sev": () => "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfYaqcd7ktIsDDPVtDXMuZtUoADBgHNPbCBDjGOWaX6t3k0pxz69g0Oyg&s=10", // Custom Sev image
+  "ni-mix": () => "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRoFRqyFeav245yiJJ-nfnNQT25cVeUl9-8FNmmheOqx83BAGJo7xlHuZ8&s=10",
+  "ni-dal-moth": () => "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQP5XrTeg6YWbmYmBXRaZGWAEEhmnwZFeJBYjEoMIL71kVvUdlOQp--zQ&s=10",
+  "ni-cheevda": () => "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRlj0nfki9eJagOJyHpt1mtBl44nPS_WjBTHXVHtAS61A&s",
+  "ni-sev": () => "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfYaqcd7ktIsDDPVtDXMuZtUoADBgHNPbCBDjGOWaX6t3k0pxz69g0Oyg&s=10",
   "ni-namak-para": px(7936011), // closest (fried snacks with chai)
   "ni-gathiya": px(5992272),    // closest (fried savory spirals)
   "ni-dry-fruit": px(18488301), // closest (assorted nuts)
   "ni-chips": px(5436119),      // closest (banana chips)
 
   // ---- Baked Items & Snacks ----
-  "bs-aloo-samosa": () => "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrSow8wiUuIxjfEToV69JWVUKXnNmisjibteHRz3SiFsXMpPswQFhS9QQ&s=10", // Custom Aloo Samosa image   // exact
-"bs-chicken-samosa": () => "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTRYzpm5hMwAxynW1g2RFKV8JGWyfSkr1Cb1nRlp3nKKA&s=10", // Custom Chicken Samosa imaget
-  "bs-chicken-roll": () => "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR57_4Vin-llP40cgT0pzDWVNOzpWKtCBIHkPg4G3alj53mPLWjQj8wt8hL&s=10", // Custom Chicken Roll image
-"bs-chicken-patty": () => "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQadlbxVv6EkJdQCGn-uqLFKpKWhKJRr_g_GBM3AoLCDA&s=10", // Custom Chicken Patty image
+  "bs-aloo-samosa": () => "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrSow8wiUuIxjfEToV69JWVUKXnNmisjibteHRz3SiFsXMpPswQFhS9QQ&s=10",
+  "bs-chicken-samosa": () => "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTRYzpm5hMwAxynW1g2RFKV8JGWyfSkr1Cb1nRlp3nKKA&s=10",
+  "bs-chicken-roll": () => "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR57_4Vin-llP40cgT0pzDWVNOzpWKtCBIHkPg4G3alj53mPLWjQj8wt8hL&s=10",
+  "bs-chicken-patty": () => "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQadlbxVv6EkJdQCGn-uqLFKpKWhKJRr_g_GBM3AoLCDA&s=10",
   "bs-aloo-patty": px(2474658),      // closest
   "bs-sausage-roll": px(37068875),   // closest
 
   // ---- Biscuits & Cookies ----
- "bi-bakery-biscuit": () => "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1YaNXoQ4pmSugIpzS3MJY_GTijd0nD0b9guR-0jIsOg&s=10", // Custom Bakery Biscuit image// closest
- "bi-nan-khatai": () => "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIVE7LBZjE8DbkCLCGePteRaTw-zQiTQSGQijEXhUwvQ&s=10", // Custom Nan Khatai image
- "bi-zeera": () => "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQAp5SLNMr_LkBoIhVnK42OmIzd6e_xYC6C7gqO-W5qTg&s=10", // Custom Zeera Biscuit image
- "bi-coconut": () => "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRML5q3X1rMWQcDW-RlX4VhDEV_81RxrH3odXbRQm8M1g&s=10", // Custom Coconut Biscuit image
+  "bi-bakery-biscuit": () => "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1YaNXoQ4pmSugIpzS3MJY_GTijd0nD0b9guR-0jIsOg&s=10",
+  "bi-nan-khatai": () => "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIVE7LBZjE8DbkCLCGePteRaTw-zQiTQSGQijEXhUwvQ&s=10",
+  "bi-zeera": () => "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQAp5SLNMr_LkBoIhVnK42OmIzd6e_xYC6C7gqO-W5qTg&s=10",
+  "bi-coconut": () => "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRML5q3X1rMWQcDW-RlX4VhDEV_81RxrH3odXbRQm8M1g&s=10",
   "bi-fruit-nut": px(1020585),      // closest
   "bi-choc-chip": px(8081574),      // exact
 
   // ---- Bread & Rusk ----
-  "br-milk-bread": () => "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQU62tN01c2zFojT_5CkMvmCZ2pP_D8leefDhJWiLXfXQ&s=10", // Custom Milk Bread image
-"br-brown-bread": () => "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT11ClYbza5pGgqr390Rw3l1HzAYlV1kynxTKiwO296XA&s=10", // Custom Brown Bread image
-  "br-pav": () => "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSTbzxQ8M5exZ-f8yAVxaVIqho5uclHGgdnP9C_tSxWow&s=10", // Custom Pav image
- "br-cake-rusk": () => "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSGjZ1QVdplC94dIiPONeutYejvbLhkcTqCX080dtWi3w&s=10", // Custom Cake Rusk image
+  "br-milk-bread": () => "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQU62tN01c2zFojT_5CkMvmCZ2pP_D8leefDhJWiLXfXQ&s=10",
+  "br-brown-bread": () => "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT11ClYbza5pGgqr390Rw3l1HzAYlV1kynxTKiwO296XA&s=10",
+  "br-pav": () => "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSTbzxQ8M5exZ-f8yAVxaVIqho5uclHGgdnP9C_tSxWow&s=10",
+  "br-cake-rusk": () => "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSGjZ1QVdplC94dIiPONeutYejvbLhkcTqCX080dtWi3w&s=10",
   "br-plain-rusk": px(6605208), // closest (sliced bread)
 
   // ---- Tea Cakes & Pastries ----
@@ -191,7 +191,7 @@ export function imagesFor(item, w = 900) {
   const start = hash(item.id) % pool.length;
   const rotated = [...pool.slice(start), ...pool.slice(0, start)];
   const own = ITEM_PHOTOS[item.id];
-  return (own ? [own, ...rotated] : rotated).map((f) => f(w));
+  return (own ? [typeof own === "function" ? own(w) : own, ...rotated] : rotated);
 }
 
 export const categoryImages = (category, w = 1000) => (POOLS[category] || POOLS["regular-mithai"]).map((f) => f(w));
@@ -205,3 +205,21 @@ export const IMG = {
   nimco: POOLS.nimco[0](800),
 };
 export const categoryImage = (category) => categoryImages(category, 800)[0];
+
+export const COVER_PHOTOS = {};
+
+// Missing ALL_PHOTO_SLOTS function added to fix Vercel build error
+export function ALL_PHOTO_SLOTS(menu) {
+  return menu.map((m) => {
+    const photoFn = ITEM_PHOTOS[m.id];
+    let url = "";
+    if (photoFn) {
+      url = typeof photoFn === "function" ? photoFn() : photoFn;
+    } else {
+      const pool = POOLS[m.category] || POOLS["regular-mithai"];
+      const start = hash(m.id) % pool.length;
+      url = pool[start](900);
+    }
+    return { slot: m.id, url };
+  });
+}
