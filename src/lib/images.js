@@ -191,24 +191,30 @@ export function imagesFor(item, w = 900) {
   const start = hash(item.id) % pool.length;
   const rotated = [...pool.slice(start), ...pool.slice(0, start)];
   const own = ITEM_PHOTOS[item.id];
-  return (own ? [typeof own === "function" ? own(w) : own, ...rotated] : rotated);
+  
+  let resolvedOwn = null;
+  if (own) {
+    resolvedOwn = typeof own === "function" ? own(w) : own;
+  }
+  
+  const poolUrls = rotated.map((f) => (typeof f === "function" ? f(w) : f));
+  return resolvedOwn ? [resolvedOwn, ...poolUrls] : poolUrls;
 }
 
-export const categoryImages = (category, w = 1000) => (POOLS[category] || POOLS["regular-mithai"]).map((f) => f(w));
-export const heroImages = (key, w = 1200) => (HERO_PHOTOS[key] || HERO_PHOTOS.sweets).map((f) => f(w));
+export const categoryImages = (category, w = 1000) => (POOLS[category] || POOLS["regular-mithai"]).map((f) => (typeof f === "function" ? f(w) : f));
+export const heroImages = (key, w = 1200) => (HERO_PHOTOS[key] || HERO_PHOTOS.sweets).map((f) => (typeof f === "function" ? f(w) : f));
 
 // Legacy single-URL helpers (About page, older imports)
 export const IMG = {
-  sweets: POOLS["regular-mithai"][1](800),
-  cake: POOLS.cakes[0](800),
-  bakery: POOLS["bread-rusk"][0](800),
-  nimco: POOLS.nimco[0](800),
+  sweets: typeof POOLS["regular-mithai"][1] === "function" ? POOLS["regular-mithai"][1](800) : POOLS["regular-mithai"][1],
+  cake: typeof POOLS.cakes[0] === "function" ? POOLS.cakes[0](800) : POOLS.cakes[0],
+  bakery: typeof POOLS["bread-rusk"][0] === "function" ? POOLS["bread-rusk"][0](800) : POOLS["bread-rusk"][0],
+  nimco: typeof POOLS.nimco[0] === "function" ? POOLS.nimco[0](800) : POOLS.nimco[0],
 };
 export const categoryImage = (category) => categoryImages(category, 800)[0];
 
 export const COVER_PHOTOS = {};
 
-// Missing ALL_PHOTO_SLOTS function added to fix Vercel build error
 export function ALL_PHOTO_SLOTS(menu) {
   return menu.map((m) => {
     const photoFn = ITEM_PHOTOS[m.id];
@@ -218,7 +224,8 @@ export function ALL_PHOTO_SLOTS(menu) {
     } else {
       const pool = POOLS[m.category] || POOLS["regular-mithai"];
       const start = hash(m.id) % pool.length;
-      url = pool[start](900);
+      const fn = pool[start];
+      url = typeof fn === "function" ? fn(900) : fn;
     }
     return { slot: m.id, url };
   });
